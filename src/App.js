@@ -46,7 +46,8 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        fetch('http://localhost:5000/get/student/1')
+      //TODO make this url dynamically fetched based on flavor
+        fetch('http://sherriffspec-api.herokuapp.com/get/student/1')
             .then(results => {
                 return results.json();
             }).then(results => {
@@ -91,12 +92,15 @@ class App extends React.Component {
                     </div>
                     <div className="col text-center">
                         <KAM masteries={this.state.sprints}
-                             title={"Sprint Checks"}
-                             team_evals_received={this.state.team_evals_received}
+                             title={"Course Project"}
+                             team_evals_received={[]}
+                             course_project_score={7.3333}
+                        //TODO: add course_project_score to API
                         />
                     </div>
                     <div className="col" style={{marginRight: '2rem'}}>
                         <Attendance lab_attendance={this.state.lab_attendance}
+                                    team_evals_received={this.state.team_evals_received}
                                     guided_practices={this.state.guided_practices}/>
                     </div>
                 </div>

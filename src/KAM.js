@@ -17,13 +17,8 @@ class KAM extends React.Component{
 
     render(){
         let completed = 0;
-        let eval_score = 0;
+        let course_project_score = this.props.course_project_score;
         let num_evals = 0;
-        this.props.team_evals_received.map(function(e) {
-            num_evals++
-            eval_score += e.rating
-            return null
-        })
         let ka_list = this.props.masteries.map(function(ka) {
             let title = ka.title;
             let isopen = ka.title === this.state.open;
@@ -44,8 +39,8 @@ class KAM extends React.Component{
             </div>;
         }.bind(this));
         let total = ka_list.length;
-        let eval_score_header = eval_score > 0 ? <div>
-            <h2> Team Evaluation Score: {eval_score/num_evals}</h2>
+        let course_project_score_header = course_project_score > 0 ? <div>
+            <h2> Course Project Score: {course_project_score}</h2>
         </div> : <div/>
         let header = <div className="text-center">
             <h1><strong>{this.props.title}</strong></h1>
@@ -56,7 +51,7 @@ class KAM extends React.Component{
             <div>
             <div style={{background: "#e6e6e6", padding: '1rem'}}>
                 {header}
-                {eval_score_header}
+                {course_project_score_header}
                 {ka_list}
             </div>
             </div>);
