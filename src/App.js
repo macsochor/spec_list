@@ -46,7 +46,7 @@ class App extends React.Component {
     }
 
     componentDidMount() {
-        fetch('https://afternoon-scrubland-29338.herokuapp.com/get/student/1')
+        fetch('http://localhost:5000/get/student/1')
             .then(results => {
                 return results.json();
             }).then(results => {
