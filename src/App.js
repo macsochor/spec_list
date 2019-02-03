@@ -47,7 +47,7 @@ class App extends React.Component {
 
     componentDidMount() {
       //TODO make this url dynamically fetched based on flavor
-        fetch('http://sherriffspec-api.herokuapp.com/get/student/1')
+        fetch('https://sherriffspec-api.herokuapp.com/get/student/1')
             .then(results => {
                 return results.json();
             }).then(results => {
