@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import KAM from './KAM.js'
 import Attendance from './Attendance.js'
+import Sprints from './Sprints.js'
 //import './App.css';
 import {Button, Panel, Badge, Table, CardBody, Card, Collapse} from 'reactstrap'
 
@@ -47,18 +48,41 @@ class App extends React.Component {
 
     componentDidMount() {
       //TODO make this url dynamically fetched based on flavor
-        fetch('https://sherriffspec-api.herokuapp.com/get/student/1')
+      let url = "http://localhost:5000/"
+        fetch('http://localhost:5000/get/student/1')
             .then(results => {
                 return results.json();
             }).then(results => {
                 this.setState({student : results,
-                               masteries : results.knowledge_area_masteries,
                                lab_attendance: results.lab_attendances,
                                guided_practices: results.guided_practices,
                                sprints: results.sprint_checks,
                                team_evals_received: results.team_evaluations_received,
                 });
                 console.log("state", this.state)
+            })
+      //TODO look into why the get/student/1 does not return kam_pieces
+      fetch('http://localhost:5000/get/student/1/knowledge_area_masteries')
+            .then(masteries => {
+              return masteries.json();
+            }).then(masteries => {
+              console.log("GET KAMs", masteries.objects)
+              for(let ka_index = 0; ka_index < masteries.objects.length; ka_index++){
+                let ka = masteries.objects[ka_index]
+                for(let pg_index = 0; pg_index < ka.pass_groups.length; pg_index++){
+                  let pg = ka.pass_groups[pg_index]
+                  pg.pass_group_pieces = []
+                  console.log("pg", pg)
+                  fetch(url+"get/pass_group/" + pg.id).then(pass_group => {
+                    return pass_group.json();
+                  }).then(pass_group => {
+                    console.log("INSIDE PASS GROUP", pass_group)
+                    pg.pass_group_pieces = pass_group.pass_group_pieces
+                    this.setState({masteries: masteries.objects})
+                  })
+                };
+                console.log("STATE", this.state)
+              }
             })
     }
 
@@ -90,13 +114,11 @@ class App extends React.Component {
                             />
                         </div>
                     </div>
-                    <div className="col text-center">
-                        <KAM masteries={this.state.sprints}
-                             title={"Course Project"}
-                             team_evals_received={[]}
-                             course_project_score={7.3333}
-                        //TODO: add course_project_score to API
-                        />
+                    <div className="col">
+                      <Sprints sprints={this.state.sprints}
+                               title={"Sprint Checks"}
+                               course_project_score={7.5}
+                      />
                     </div>
                     <div className="col" style={{marginRight: '2rem'}}>
                         <Attendance lab_attendance={this.state.lab_attendance}
